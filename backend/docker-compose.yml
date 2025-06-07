@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  nepse-api:
+    build: .
+    container_name: nepse-stock-api
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - DEBUG=False
+      - CACHE_TIMEOUT=300
+      - NEPSE_API_URL=https://nepalstock.com/api
+      - UNOFFICIAL_API_URL=https://nepalstock.onrender.com
+      - MEROLAGANI_URL=https://merolagani.com
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
